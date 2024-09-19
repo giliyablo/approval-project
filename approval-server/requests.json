@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "privilege": "Admin",
+    "status": "Approved"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "privilege": "User",
+    "status": "Approved"
+  },
+  {
+    "id": 3,
+    "name": "Alice Johnson",
+    "privilege": "Admin",
+    "status": "Pending"
+  },
+  {
+    "id": 4,
+    "name": "Bob Brown",
+    "privilege": "User",
+    "status": "Pending"
+  }
+]
