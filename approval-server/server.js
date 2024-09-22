@@ -43,6 +43,36 @@ app.post('/api/requests/:id/approve', (req, res) => {
     }
 });
 
+// Endpoint to receive form data
+app.post('/api/form-responses', (req, res) => {
+    const formData = req.body;
+    console.log('Form Data Received:', formData);
+
+    // Extract specific fields from the form data
+    const {
+        ID,
+        'שעת התחלה': startTime,
+        'שעת השלמה': endTime,
+        'דואר אלקטרוני': email,
+        'שם': name,
+        'שם פרטי (באנגלית)': firstName,
+        'שם משפחה (באנגלית)': lastName,
+        'מספר טלפון': phoneNumber,
+        'גורם מפנה מענף אגמי"ם לפתיחת המשתמש (קצין מאשר מענף אגמים)': referringOfficer,
+        'ארגון': organization,
+        // Add other fields as needed
+    } = formData;
+
+    // Example of processing the data
+    console.log(`ID: ${ID}, Start Time: ${startTime}, End Time: ${endTime}, Email: ${email}, Name: ${name}`);
+
+    // Add the form data to the requests array
+    requests.push(formData);
+    saveRequests();
+
+    res.status(200).send('Form data received');
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
