@@ -37,7 +37,7 @@ app.post('/api/requests/:id/approve', (req, res) => {
     const request = requests.find(r => r.ID === parseInt(id));
     if (request) {
         request.status = 'Approved';
-        request.comments = comment;
+        request.comments = comment; // Save the comment
         saveRequests();
         res.json({ message: 'Request approved' });
     } else {
