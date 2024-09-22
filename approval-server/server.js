@@ -33,9 +33,11 @@ app.get('/api/requests', (req, res) => {
 
 app.post('/api/requests/:id/approve', (req, res) => {
     const { id } = req.params;
+    const { comment } = req.body;
     const request = requests.find(r => r.ID === parseInt(id));
     if (request) {
         request.status = 'Approved';
+        request.comments = comment;
         saveRequests();
         res.json({ message: 'Request approved' });
     } else {
@@ -66,8 +68,8 @@ app.post('/api/form-responses', (req, res) => {
     // Example of processing the data
     console.log(`ID: ${ID}, Start Time: ${startTime}, End Time: ${endTime}, Email: ${email}, Name: ${name}`);
 
-    // Add the form data to the requests array
-    requests.push({ ...formData, comments: '' });
+    // Add the form data to the requests array with default status
+    requests.push({ ...formData, status: 'unapproved', comments: '' });
     saveRequests();
 
     res.status(200).send('Form data received');
