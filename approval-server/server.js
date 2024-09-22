@@ -33,7 +33,7 @@ app.get('/api/requests', (req, res) => {
 
 app.post('/api/requests/:id/approve', (req, res) => {
     const { id } = req.params;
-    const request = requests.find(r => r.id === parseInt(id));
+    const request = requests.find(r => r.ID === parseInt(id));
     if (request) {
         request.status = 'Approved';
         saveRequests();
@@ -67,10 +67,24 @@ app.post('/api/form-responses', (req, res) => {
     console.log(`ID: ${ID}, Start Time: ${startTime}, End Time: ${endTime}, Email: ${email}, Name: ${name}`);
 
     // Add the form data to the requests array
-    requests.push(formData);
+    requests.push({ ...formData, comments: '' });
     saveRequests();
 
     res.status(200).send('Form data received');
+});
+
+// Endpoint to update comments
+app.post('/api/requests/:id/comment', (req, res) => {
+    const { id } = req.params;
+    const { comment } = req.body;
+    const request = requests.find(r => r.ID === parseInt(id));
+    if (request) {
+        request.comments = comment;
+        saveRequests();
+        res.json({ message: 'Comment added' });
+    } else {
+        res.status(404).json({ message: 'Request not found' });
+    }
 });
 
 app.listen(PORT, () => {
