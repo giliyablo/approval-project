@@ -33,14 +33,16 @@ app.get('/api/requests', (req, res) => {
 
 app.post('/api/requests/:id/approve', (req, res) => {
     const { id } = req.params;
+    console.log(`Approving request with ID: ${id}`);
     const { comment } = req.body;
-    const request = requests.find(r => r.ID === parseInt(id));
+    const request = requests.find(r => r.ID === id);
     if (request) {
         request.status = 'Approved';
         request.comments = comment; // Save the comment
         saveRequests();
         res.json({ message: 'Request approved' });
     } else {
+        console.log(`Request with ID: ${id} not found`);
         res.status(404).json({ message: 'Request not found' });
     }
 });
@@ -79,7 +81,7 @@ app.post('/api/form-responses', (req, res) => {
 app.post('/api/requests/:id/comment', (req, res) => {
     const { id } = req.params;
     const { comment } = req.body;
-    const request = requests.find(r => r.ID === parseInt(id));
+    const request = requests.find(r => r.ID === id);
     if (request) {
         request.comments = comment;
         saveRequests();
