@@ -5,6 +5,7 @@ import './App.css';
 function App() {
     const [requests, setRequests] = useState([]);
     const [comments, setComments] = useState({});
+    const [editing, setEditing] = useState({});
 
     useEffect(() => {
         fetchRequests();
@@ -46,10 +47,21 @@ function App() {
             .then(response => {
                 console.log(response.data.message);
                 fetchRequests();
+                setEditing(prevEditing => ({
+                    ...prevEditing,
+                    [id]: false
+                }));
             })
             .catch(error => {
                 console.error('There was an error saving the comment!', error);
             });
+    };
+
+    const toggleEditing = (id) => {
+        setEditing(prevEditing => ({
+            ...prevEditing,
+            [id]: !prevEditing[id]
+        }));
     };
 
     return (
@@ -88,12 +100,21 @@ function App() {
                             <td>{request['ארגון']}</td>
                             <td>{(request.status && request.status === 'Approved') ? 'Approved' : 'Unapproved'}</td>
                             <td>
-                                <input
-                                    type="text"
-                                    value={comments[request.ID] || ''}
-                                    onChange={(e) => handleCommentChange(request.ID, e.target.value)}
-                                />
-                                <button onClick={() => saveComment(request.ID)}>Save Comment</button>
+                                {editing[request.ID] ? (
+                                    <>
+                                        <input
+                                            type="text"
+                                            value={comments[request.ID] || ''}
+                                            onChange={(e) => handleCommentChange(request.ID, e.target.value)}
+                                        />
+                                        <button onClick={() => saveComment(request.ID)}>Save</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>{request.comments}</span>
+                                        <button onClick={() => toggleEditing(request.ID)}>Edit</button>
+                                    </>
+                                )}
                             </td>
                             <td>
                                 {!(request.status && request.status === 'Approved') && (
